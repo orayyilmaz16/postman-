@@ -1,0 +1,262 @@
+{
+	"info": {
+		"_postman_id": "f56e41c8-6766-4d14-b047-881a9ae84dfa",
+		"name": "Restful Booker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "40110263-f56e41c8-6766-4d14-b047-881a9ae84dfa"
+	},
+	"item": [
+		{
+			"name": "CreateBooking",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d137196e-6fb7-4c95-bb63-8d301fc8c20f",
+						"exec": [
+							"console.clear();\r",
+							"\r",
+							"const firstName = pm.variables.replaceIn(\"{{$randomFirstName}}\");\r",
+							"pm.collectionVariables.set(\"firstName\", firstName);\r",
+							"\r",
+							"const  lastName = pm.variables.replaceIn(\"{{$randomLastName}}\");\r",
+							"pm.collectionVariables.set(\"lastName\",lastName);\r",
+							"\r",
+							"const depositPaid = pm.variables.replaceIn(\"{{$randomBoolean}}\");\r",
+							"pm.collectionVariables.set(\"depositPaid\",depositPaid);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "a4b46584-bfbc-4a39-98ca-4110414c8d6b",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"firstname\" , function(){\r",
+							"    pm.expect(jsonData.booking.firstName).to.eql(pm.collectionVariables.get(\"$firstName\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"lastname\", function(){\r",
+							"    pm.expect(jsonData.booking.lastname).to.eql(pm.collectionVariables.get(\"lastName\"));\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Test data type of the response\", () =>{\r",
+							"    pm.expect(jsonData.booking.firstName).to.not.be.null;\r",
+							"    pm.expect(jsonData.booking.depositpaid).to.not.be.undefined;\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.unset(\"fakedepositpaid\");\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "763ff713-1e3e-442c-94fd-0261ee4910cb",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\" : \"{{firstName}}\",\r\n    \"lastname\" : \"{{lastName}}\",\r\n    \"totalprice\" : 111,\r\n    \"depositpaid\" : \"{{depositPaid}}\",\r\n    \"bookingdates\" : {\r\n        \"checkin\" : \"2018-01-01\",\r\n        \"checkout\" : \"2019-01-01\"\r\n    },\r\n    \"additionalneeds\" : \"Breakfast\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBooking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1ffa0d6b-6b5c-448a-8137-31c55ea3b5d0",
+						"exec": [
+							"pm.test(\"Status code is  200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code name has string\", function(){\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "546fc0c5-29d8-4900-bce5-08198e79ed17",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking/:id",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateBooking",
+			"id": "9ad45231-e6dd-4be7-a4eb-9427a0126ca6",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking/:id",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PartialUpdateBooking",
+			"id": "3361dc8e-1c74-4598-932a-4692bbaeee2b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking/:id",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteBooking",
+			"id": "6cb84109-0d2e-4318-a321-cf97e0c7ab19",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking/1",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "440f99fd-b7c1-44b5-b167-7ace147a732b",
+			"key": "fakeFirstName",
+			"value": ""
+		},
+		{
+			"id": "0506cfdd-1023-4699-9218-f1763206fe90",
+			"key": "fakeLastName",
+			"value": ""
+		},
+		{
+			"id": "bcfe2302-534c-4b59-8956-8b38a2fa7298",
+			"key": "firstName",
+			"value": ""
+		},
+		{
+			"id": "f39e9855-2635-45b3-a6f0-9826f30ec253",
+			"key": "lastName",
+			"value": ""
+		},
+		{
+			"id": "419dd067-62d4-4305-a669-cc4db1353b94",
+			"key": "depositPaid",
+			"value": ""
+		}
+	]
+}
